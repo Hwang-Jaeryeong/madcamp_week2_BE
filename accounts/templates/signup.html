@@ -1,0 +1,9 @@
+<!-- accounts/templates/signup.html -->
+<form method="post" action="{% url 'signup' %}">
+    {% csrf_token %}
+    Email: <input type="email" name="email" required><br>
+    Name: <input type="text" name="name" required><br>
+    Phone Number: <input type="text" name="phone_number" required><br>
+    Password: <input type="password" name="password" required><br>
+    <input type="submit" value="회원가입">
+</form>

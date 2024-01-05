@@ -1,0 +1,8 @@
+<!-- accounts/templates/signin.html -->
+<form method="post" action="{% url 'signin' %}">
+    {% csrf_token %}
+    Email: <input type="email" name="email" required><br>
+    Password: <input type="password" name="password" required><br>
+    <input type="submit" value="로그인">
+</form>
+
