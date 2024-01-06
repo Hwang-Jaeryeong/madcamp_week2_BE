@@ -1,3 +1,4 @@
+#settings.py
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -15,7 +16,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.google',
 
     # DRF
     'rest_framework',
@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     # rest_auth
     'rest_auth',
 
+
     # My Apps
+    'store',
     'accounts',
 ]
 
@@ -51,17 +53,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-# Account and Social Account settings
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # 이메일 확인 생략 (optional)
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-SOCIALACCOUNT_AUTO_SIGNUP = True  # 소셜 로그인 시 자동으로 계정 생성
-SOCIALACCOUNT_LOGIN_ON_GET = False
-ACCOUNT_LOGOUT_ON_GET = True
-
-# Redirect URLs
-LOGIN_REDIRECT_URL = '/'  # 로그인 후 리다이렉트할 URL
-LOGOUT_REDIRECT_URL = '/'  # 로그아웃 후 리다이렉트할 URL
 
 SOCIALACCOUNT_PROVIDERS = {
     'kakao': {
@@ -73,8 +64,15 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     # 다른 소셜 계정 공급자에 대한 설정도 추가할 수 있음
 }
+# Account and Social Account settings
+SOCIALACCOUNT_LOGIN_ON_GET = True
+LOGIN_REDIRECT_URL = 'store_list'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'store_list'
+ACCOUNT_LOGOUT_ON_GET = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-AUTH_USER_MODEL = 'accounts.User'
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
