@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
 
     # DRF
     'rest_framework',
@@ -69,8 +69,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = 'store_list'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'store_list'
 ACCOUNT_LOGOUT_ON_GET = False
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True  # 소셜 로그인 시 자동으로 계정 생성
 
 
 
