@@ -1,8 +1,8 @@
 # accounts/urls.py
 from django.urls import path
-from .views import *
+from .views import NaverLoginView
 
 urlpatterns = [
-    path('kakao/login/', kakao_login, name='kakao_login'),
-    path('kakao/login/callback/', kakao_callback, name="kakao_callback"),
+    path('accounts/naver/login/', NaverLoginView.as_view(), name='naver_login'),
+
 ]

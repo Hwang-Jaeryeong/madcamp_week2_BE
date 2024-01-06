@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.naver',
 
     # DRF
     'rest_framework',
@@ -54,16 +54,18 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+# settings.py
 SOCIALACCOUNT_PROVIDERS = {
-    'kakao': {
-        # 카카오 설정
+    'naver': {
         'APP': {
-            'client_id': 'aff295bb2c86c694086dd2c6139affc3',
-            'secret': '1018564',
+            'client_id': 'jPXV2kSPuse24AWnKJXb',
+            'secret': 'N4obzrGw2x',
+            'key': '',
         }
-    },
-    # 다른 소셜 계정 공급자에 대한 설정도 추가할 수 있음
+    }
 }
+
+
 # Account and Social Account settings
 SOCIALACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = 'store_list'
