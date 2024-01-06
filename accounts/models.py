@@ -1,6 +1,6 @@
 # accounts/models.py
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, phone_number, password=None):
@@ -24,6 +24,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     password = models.CharField(max_length=100)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -35,5 +37,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
 
 

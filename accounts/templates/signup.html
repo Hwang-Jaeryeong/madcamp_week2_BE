@@ -5,5 +5,23 @@
     Name: <input type="text" name="name" required><br>
     Phone Number: <input type="text" name="phone_number" required><br>
     Password: <input type="password" name="password" required><br>
+    <input type="hidden" name="latitude" id="latitude" value="">
+    <input type="hidden" name="longitude" id="longitude" value="">
     <input type="submit" value="회원가입">
 </form>
+
+
+<script>
+// 사용자 위치 정보를 받아와 hidden 필드에 설정하는 JavaScript 코드
+navigator.geolocation.getCurrentPosition(
+  (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    document.getElementById('latitude').value = latitude;
+    document.getElementById('longitude').value = longitude;
+  },
+  (error) => {
+    console.error('Error getting geolocation:', error.message);
+  }
+);
+</script>

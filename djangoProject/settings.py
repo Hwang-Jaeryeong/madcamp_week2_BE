@@ -25,6 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # 카카오 sdk
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
 
     # DRF
     'rest_framework',
@@ -37,6 +44,36 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+SITE_ID = 1
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+# Account and Social Account settings
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # 이메일 확인 생략 (optional)
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = True  # 소셜 로그인 시 자동으로 계정 생성
+SOCIALACCOUNT_LOGIN_ON_GET = False
+ACCOUNT_LOGOUT_ON_GET = True
+
+# Redirect URLs
+LOGIN_REDIRECT_URL = '/'  # 로그인 후 리다이렉트할 URL
+LOGOUT_REDIRECT_URL = '/'  # 로그아웃 후 리다이렉트할 URL
+
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        # 카카오 설정
+        'APP': {
+            'client_id': 'aff295bb2c86c694086dd2c6139affc3',
+            'secret': '1018564',
+        }
+    },
+    # 다른 소셜 계정 공급자에 대한 설정도 추가할 수 있음
+}
+
 AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
@@ -45,6 +82,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
