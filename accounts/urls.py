@@ -1,8 +1,9 @@
-# accounts/urls.py
+# urls.py
 from django.urls import path
-from .views import NaverLoginView
+from .views import register_user, login_user, logout_user
 
 urlpatterns = [
-    path('accounts/naver/login/', NaverLoginView.as_view(), name='naver_login'),
-
+    path('register/', register_user, name='register_user'),
+    path('login/', login_user, name='login_user'),
+    path('logout/', logout_user, name='logout_user'),
 ]

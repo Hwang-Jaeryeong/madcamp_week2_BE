@@ -1,5 +1,7 @@
 #settings.py
 from pathlib import Path
+from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,14 +38,17 @@ INSTALLED_APPS = [
     # DRF
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 
     # rest_auth
     'rest_auth',
+    'rest_auth.registration',
 
 
     # My Apps
     'store',
     'accounts',
+    'cart',
 ]
 
 SITE_ID = 1
@@ -64,7 +69,29 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
+
+# JWT 설정
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}
 
 # Account and Social Account settings
 SOCIALACCOUNT_LOGIN_ON_GET = True
@@ -112,14 +139,25 @@ WSGI_APPLICATION = "djangoProject.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+ #   "default": {
+ #       "ENGINE": "django.db.backends.mysql",
+  #      "NAME": "breakfirst",
+   #     'USER': 'root',
+    #    'PASSWORD': 'j20020607',
+     #   'HOST': 'localhost',
+      #  'PORT': '3306',
+    #}
+#}
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "breakfirst",
-        'USER': 'root',
-        'PASSWORD': 'j20020607',
-        'HOST': 'localhost',
-        'PORT': '3306',
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config("DATABASE_NAME"),
+        'USER': config("DATABASE_USERNAME"),
+        'PASSWORD': config("DATABASE_PASSWORD"),
+        'HOST': config("DATABASE_HOST"),
+        'PORT': config("DATABASE_PORT", cast=int),
     }
 }
 

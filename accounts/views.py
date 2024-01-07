@@ -1,36 +1,44 @@
-# accounts/views.py
-from allauth.socialaccount.models import SocialAccount
-from allauth.socialaccount.providers.naver.views import NaverOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from allauth.socialaccount.providers.oauth2.views import OAuth2LoginView
+# views.py
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 
-from allauth.socialaccount.models import SocialToken
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_user(request):
+    serializer = CustomUserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_user(request):
+    email = request.data.get('email')
+    phone_number = request.data.get('phone_number')
+    user = CustomUser.objects.filter(email=email, phone_number=phone_number).first()
 
-class NaverLoginView(OAuth2LoginView):
-    adapter_class = NaverOAuth2Adapter
-    client_class = OAuth2Client
+    if user:
+        refresh = RefreshToken.for_user(user)
+        data = {
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
+            'email': user.email,
+            'username': user.username,
+            'phone_number': user.phone_number,
+            'current_location': user.current_location,
+        }
+        return Response(data, status=status.HTTP_200_OK)
 
-    def get_success_url(self):
-        # SocialAccount를 통해 특정 사용자의 네이버 소셜 계정을 가져옵니다.
-        social_account = SocialAccount.objects.filter(user=self.request.user, provider='naver').first()
+    return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        if social_account:
-            try:
-                # SocialToken을 통해 액세스 토큰을 가져옵니다.
-                social_token = SocialToken.objects.get(account=social_account)
-
-                # 액세스 토큰 출력 또는 활용
-                access_token = social_token.token
-                print(f"네이버 액세스 토큰: {access_token}")
-
-                # 여기서 액세스 토큰을 사용하여 추가적인 작업을 수행할 수 있습니다.
-                # 예를 들어 네이버 API에 요청을 보내서 사용자 정보를 가져오는 등의 작업이 가능합니다.
-
-            except SocialToken.DoesNotExist:
-                print("SocialToken이 존재하지 않습니다.")
-            except Exception as e:
-                print(f"액세스 토큰을 가져오는 중 에러 발생: {e}")
-
-        return super().get_success_url()
-
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    # You can add additional logout logic here if needed
+    return Response({'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
