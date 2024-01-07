@@ -53,3 +53,8 @@ class Price(models.Model):
 
     def __str__(self):
         return f"{self.menu.name} - {self.price}"
+
+
+class Star(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    rating = models.IntegerField()

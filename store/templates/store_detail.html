@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ store.name }} Details</title>
+</head>
+<body>
+
+<h1>{{ store.name }} Details</h1>
+
+<!-- 별점을 남길 수 있는 폼 -->
+<form method="post" action="{% url 'rate_store' store.id %}">
+    {% csrf_token %}
+    <label for="rating">Rate the store:</label>
+    <select name="rating">
+        <option value="1">1 star</option>
+        <option value="2">2 stars</option>
+        <option value="3">3 stars</option>
+        <option value="4">4 stars</option>
+        <option value="5">5 stars</option>
+    </select>
+    <button type="submit">Submit Rating</button>
+</form>
+
+<!-- 별점 평균을 표시하는 부분 -->
+<p>Average Rating: {{ average_rating }}</p>
+
+</body>
+</html>

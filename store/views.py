@@ -1,7 +1,8 @@
 # store/views.py
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from .models import Store, Menu, Price
+from django.views.decorators.http import require_POST, require_GET
+from .models import Store, Menu, Price, Star
 
 def store_list(request):
     stores = Store.objects.all()
@@ -45,3 +46,26 @@ def menu_price(request, store_id, menu_id):
 
     return JsonResponse({"가격": price.price})
 
+
+@require_POST
+def rate_store(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    rating = int(request.POST.get('rating', 0))
+
+    if 1 <= rating <= 5:
+        Star.objects.create(store=store, rating=rating)
+
+    return JsonResponse({'message': 'Rating submitted successfully'})
+
+
+@require_GET
+def get_average_rating(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    ratings = Star.objects.filter(store=store).values_list('rating', flat=True)
+
+    if ratings:
+        average_rating = sum(ratings) / len(ratings)
+    else:
+        average_rating = 0
+
+    return JsonResponse({'average_rating': average_rating})
