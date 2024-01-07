@@ -2,7 +2,7 @@
 ###########
 
 # pull official base image
-FROM python:3.8.3-alpine as builder
+FROM python:3.8.3 as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -12,12 +12,18 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+#RUN apk add --no-cache libffi-dev
+#RUN apk add --no-cache build-base
+
 # install psycopg2 dependencies
-RUN apk update && apk add python3 python3-dev mariadb-dev build-base && pip3 install mysqlclient
+
+RUN apt-get update && apt-get install -y python3 python3-dev libmariadb-dev build-essential && pip3 install mysqlclient
+
 
 # install dependencies
 COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
 
 
 #########
@@ -25,13 +31,14 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 #########
 
 # pull official base image
-FROM python:3.8.3-alpine
+FROM python:3.8.3
 
 # create directory for the app user
 RUN mkdir -p /home/app
 
 # create the app user
-RUN addgroup -S app && adduser -S app -G app
+RUN addgroup --system app && adduser --system --ingroup app app
+
 
 # create the appropriate directories
 ENV HOME=/home/app
@@ -42,15 +49,17 @@ RUN mkdir $APP_HOME/media
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add libpq
-RUN apk update \
-    && apk add --virtual build-deps gcc python3-dev musl-dev \
-    && apk add --no-cache mariadb-dev
+
+RUN apt-get update && apt-get install -y libpq-dev
+RUN apt-get update \
+    && apt-get install -y gcc python3-dev libmariadb-dev
+
+
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install mysqlclient
 RUN pip install --no-cache /wheels/*
-RUN apk del build-deps
+#RUN apk del build-deps
 
 # copy entrypoint-prod.sh
 COPY ./config/docker/entrypoint.prod.sh $APP_HOME
