@@ -54,6 +54,10 @@ class Price(models.Model):
     def __str__(self):
         return f"{self.menu.name} - {self.price}"
 
+    @property
+    def store_id(self):
+        return self.menu.store.id
+
 
 
 class Star(models.Model):

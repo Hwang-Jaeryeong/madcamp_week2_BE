@@ -9,11 +9,26 @@ def store_list(request):
     store_dict = {store.name: store.id for store in stores}
     return JsonResponse(store_dict)
 
+def menu_price(request, store_id, menu_id):
+    try:
+        price = Price.objects.get(menu__store_id=store_id, menu_id=menu_id)
+    except Price.DoesNotExist:
+        return JsonResponse({"error": "가격을 찾을 수 없습니다."}, status=404)
+
+    return JsonResponse({"가격": price.price})
+
+def get_menu_price(menu_id):
+    try:
+        price = Price.objects.get(menu_id=menu_id)
+        return price.price
+    except Price.DoesNotExist:
+        return None
+
 def menu_list(request):
     menus = Menu.objects.all()
     menu_list = [
         {
-            "menu_id": menu.id,  # 수정된 부분
+            "menu_id": menu.id,
             "name": menu.name,
             "store_id": menu.store.id,
             "remaining_quantity": menu.remaining_quantity,
@@ -24,7 +39,8 @@ def menu_list(request):
                 "detail_gram2": menu.detail_gram2,
                 "detail_name3": menu.detail_name3,
                 "detail_gram3": menu.detail_gram3,
-            }
+            },
+            "price": get_menu_price(menu.id)  # 새로운 함수 호출로 가격 정보 가져오기
         }
         for menu in menus
     ]
@@ -69,14 +85,6 @@ def store_detail(request, store_id, menu_id=None):
         }
 
     return JsonResponse(response_data)
-
-def menu_price(request, store_id, menu_id):
-    try:
-        price = Price.objects.get(menu__store_id=store_id, menu_id=menu_id)
-    except Price.DoesNotExist:
-        return JsonResponse({"error": "가격을 찾을 수 없습니다."}, status=404)
-
-    return JsonResponse({"가격": price.price})
 
 
 
