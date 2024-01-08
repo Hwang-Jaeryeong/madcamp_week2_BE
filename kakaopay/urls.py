@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='kakao'),
     path('kakaoPay/', views.kakaoPay),
     path('kakaoPayLogic/', views.kakaoPayLogic),
     path('paySuccess/', views.paySuccess),

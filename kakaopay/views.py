@@ -1,8 +1,5 @@
 from django.shortcuts import render, redirect
 import requests
-import json
-from django.template import loader
-from django.http import HttpResponse, JsonResponse
 
 def kakaoPay(request):
     return render(request, 'kakaopay.html')
