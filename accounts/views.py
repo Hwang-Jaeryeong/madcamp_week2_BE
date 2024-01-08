@@ -1,4 +1,4 @@
-# views.py
+# accounts/views.py
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -16,11 +16,14 @@ def register_user(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
     email = request.data.get('email')
     password = request.data.get('password')
+
+    # 변경된 부분
     user = CustomUser.objects.filter(email=email, password=password).first()
 
     if user:
