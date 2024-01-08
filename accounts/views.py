@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from django.contrib.auth.hashers import check_password
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -24,9 +25,9 @@ def login_user(request):
     password = request.data.get('password')
 
     # 변경된 부분
-    user = CustomUser.objects.filter(email=email, password=password).first()
+    user = CustomUser.objects.filter(email=email).first()
 
-    if user:
+    if user and check_password(password, user.password):
         refresh = RefreshToken.for_user(user)
         data = {
             'access_token': str(refresh.access_token),
