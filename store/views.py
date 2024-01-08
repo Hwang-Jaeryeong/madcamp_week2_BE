@@ -13,10 +13,10 @@ def menu_list(request):
     menus = Menu.objects.all()
     menu_list = [
         {
-            "id": menu.id,
+            "menu_id": menu.id,  # 수정된 부분
             "name": menu.name,
             "store_id": menu.store.id,
-            "remaining_quantity": menu.remaining.quantity,
+            "remaining_quantity": menu.remaining_quantity,
             "details": {
                 "detail_name1": menu.detail_name1,
                 "detail_gram1": menu.detail_gram1,
