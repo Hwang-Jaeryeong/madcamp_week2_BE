@@ -15,15 +15,16 @@ def store_detail(request, store_id, menu_id=None):
 
     if menu_id is not None:
         menu = get_object_or_404(Menu, store_id=store_id, id=menu_id)
-        response_data = menu.as_dict()
+        response_data = menu.as_dict(include_menu_id=True)  # 수정된 부분
     else:
         menus = Menu.objects.filter(store_id=store_id)
         store_name = store.name
-        latitude = store.latitude  # 이 부분을 추가
-        longitude = store.longitude  # 이 부분을 추가
+        latitude = store.latitude
+        longitude = store.longitude
 
         menu_list = [
             {
+                "menu_id": menu.id,  # 수정된 부분
                 "name": menu.name,
                 "remaining_quantity": menu.remaining_quantity,
                 "details": {
@@ -49,11 +50,12 @@ def store_detail(request, store_id, menu_id=None):
 
 def menu_price(request, store_id, menu_id):
     try:
-        price = Price.objects.get(menu_id=menu_id)
+        price = Price.objects.get(menu__store_id=store_id, menu_id=menu_id)
     except Price.DoesNotExist:
         return JsonResponse({"error": "가격을 찾을 수 없습니다."}, status=404)
 
     return JsonResponse({"가격": price.price})
+
 
 
 @require_POST

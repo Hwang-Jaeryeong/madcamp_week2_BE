@@ -28,8 +28,8 @@ class Menu(models.Model):
     detail_name3 = models.CharField(max_length=255, null=True, blank=True)
     detail_gram3 = models.CharField(max_length=255, null=True, blank=True)
 
-    def as_dict(self):
-        return {
+    def as_dict(self, include_menu_id=False):  # 수정된 부분
+        data = {
             "name": self.name,
             "remaining_quantity": self.remaining_quantity,
             "details": {
@@ -41,6 +41,11 @@ class Menu(models.Model):
                 "detail_gram3": self.detail_gram3,
             }
         }
+
+        if include_menu_id:  # 수정된 부분
+            data["menu_id"] = self.id  # 수정된 부분
+
+        return data
 
 class Price(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
