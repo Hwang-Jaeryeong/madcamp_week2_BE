@@ -90,4 +90,4 @@ def methodsCheck(request, id):
         print(f"POST QS : {request.GET.get('data', '')}")
         print(f"POST Dynamic Path : {id}")
         return HttpResponse("POST Request.", content_type="text/plain")
-    return render(request, 'methodGet.html')thodGet.html')
+    return render(request, 'methodGet.html')
