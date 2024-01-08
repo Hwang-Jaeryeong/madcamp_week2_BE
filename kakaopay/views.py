@@ -8,23 +8,21 @@ def kakaoPayLogic(request):
     _url = f'https://kapi.kakao.com/v1/payment/ready'
     _headers = {
         'Authorization': f'KakaoAK {_admin_key}',
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     }
     _data = {
         'cid': 'TC0ONETIME',
-        'partner_order_id':'partner_order_id',
-        'partner_user_id':'partner_user_id',
+        'partner_order_id':'1001',
+        'partner_user_id':'jryeong67',
         'item_name':'비타민 과일 박스 세트',
         'quantity':'1',
         'total_amount':'3000',
-        'vat_amount':'0',
         'tax_free_amount':'0',
-        # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
-        # * 등록 : http://IP:8000
         'approval_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/paySuccess',
         'fail_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/payFail',
         'cancel_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/payCancel'
     }
-    _res = requests.post(_url, data=_data, headers=_headers)
+    _res = requests.post(_url, headers=_headers, data=_data)
     _result = _res.json()
     request.session['tid'] = _result['tid']
     return redirect(_result['next_redirect_pc_url'])
