@@ -19,7 +19,7 @@ def view_cart(request):
     serializer = CartItemSerializer(cart_items, many=True)
 
     # Calculate total_price
-    total_price = sum(float(item['price']) for item in serializer.data)
+    total_price = sum(int(item['price']) for item in serializer.data)
 
     # Add total_price to the response
     response_data = {
