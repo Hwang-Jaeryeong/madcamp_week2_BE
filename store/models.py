@@ -3,6 +3,8 @@ from django.db import models
 
 class Store(models.Model):
     name = models.CharField(max_length=255)
+    latitude = models.FloatField()  # 위도 필드 추가
+    longitude = models.FloatField()  # 경도 필드 추가
 
     def __str__(self):
         return self.name
