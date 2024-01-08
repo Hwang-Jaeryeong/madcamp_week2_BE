@@ -9,13 +9,19 @@ def store_list(request):
     store_dict = {store.name: store.id for store in stores}
     return JsonResponse(store_dict)
 
+
 def store_detail(request, store_id, menu_id=None):
+    store = get_object_or_404(Store, id=store_id)
+
     if menu_id is not None:
         menu = get_object_or_404(Menu, store_id=store_id, id=menu_id)
         response_data = menu.as_dict()
     else:
         menus = Menu.objects.filter(store_id=store_id)
-        store_name = get_object_or_404(Store, id=store_id).name
+        store_name = store.name
+        latitude = store.latitude  # 이 부분을 추가
+        longitude = store.longitude  # 이 부분을 추가
+
         menu_list = [
             {
                 "name": menu.name,
@@ -31,8 +37,11 @@ def store_detail(request, store_id, menu_id=None):
             }
             for menu in menus
         ]
+
         response_data = {
             "store_name": store_name,
+            "latitude": latitude,
+            "longitude": longitude,
             "menus": menu_list
         }
 
