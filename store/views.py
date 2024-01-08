@@ -9,6 +9,19 @@ def store_list(request):
     store_dict = {store.name: store.id for store in stores}
     return JsonResponse(store_dict)
 
+def menu_list(request):
+    menus = Menu.objects.all()
+    menu_list = [
+        {
+            "id": menu.id,
+            "name": menu.name,
+            "store_id": menu.store.id
+        }
+        for menu in menus
+    ]
+
+    return JsonResponse(menu_list, safe=False)
+
 
 def store_detail(request, store_id, menu_id=None):
     store = get_object_or_404(Store, id=store_id)
