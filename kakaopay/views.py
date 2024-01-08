@@ -28,4 +28,4 @@ def index(request):
         return redirect(next_url)
 
 
-    return render(request, 'kakaopay/index.html')
+    return render(request, 'kakaopay/templates/index.html')
