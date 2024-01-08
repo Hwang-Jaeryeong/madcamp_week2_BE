@@ -28,4 +28,4 @@ def index(request):
         return redirect(next_url)
 
 
-    return render(request, 'templates/index.html')
+    return render(request, 'index.html')
