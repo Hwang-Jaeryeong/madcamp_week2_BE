@@ -26,11 +26,15 @@ def get_menu_price(menu_id):
 
 def menu_list(request):
     menus = Menu.objects.all()
-    menu_list = [
-        {
+    menu_list = []
+
+    for menu in menus:
+        store = get_object_or_404(Store, id=menu.store.id)
+        menu_data = {
             "menu_id": menu.id,
             "name": menu.name,
             "store_id": menu.store.id,
+            "store_name": store.name,  # Include the store name in the menu data
             "remaining_quantity": menu.remaining_quantity,
             "details": {
                 "detail_name1": menu.detail_name1,
@@ -40,10 +44,9 @@ def menu_list(request):
                 "detail_name3": menu.detail_name3,
                 "detail_gram3": menu.detail_gram3,
             },
-            "price": get_menu_price(menu.id)  # 새로운 함수 호출로 가격 정보 가져오기
+            "price": get_menu_price(menu.id)
         }
-        for menu in menus
-    ]
+        menu_list.append(menu_data)
 
     return JsonResponse(menu_list, safe=False)
 
