@@ -15,7 +15,16 @@ def menu_list(request):
         {
             "id": menu.id,
             "name": menu.name,
-            "store_id": menu.store.id
+            "store_id": menu.store.id,
+            "remaining_quantity": menu.remaining.quantity,
+            "details": {
+                "detail_name1": menu.detail_name1,
+                "detail_gram1": menu.detail_gram1,
+                "detail_name2": menu.detail_name2,
+                "detail_gram2": menu.detail_gram2,
+                "detail_name3": menu.detail_name3,
+                "detail_gram3": menu.detail_gram3,
+            }
         }
         for menu in menus
     ]
