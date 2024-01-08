@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import requests
 
@@ -29,6 +30,11 @@ def kakaoPayLogic(request):
 
     if 'next_redirect_pc_url' in _result:
         return redirect(_result['next_redirect_pc_url'])
+    else:
+        # Handle the case when the key is not present
+        # You can redirect to an error page, display an error message, or take appropriate action
+        return HttpResponse("Error: 'next_redirect_pc_url' not found in the result dictionary.")
+
 def paySuccess(request):
     _url = 'https://kapi.kakao.com/v1/payment/approve'
     _admin_key = 'e7d2a224f2204042b041e7d646a8e640'
