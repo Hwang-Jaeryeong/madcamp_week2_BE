@@ -25,6 +25,7 @@ def kakaoPayLogic(request):
     }
     _res = requests.post(_url, headers=_headers, data=_data)
     _result = _res.json()
+    print(_result)
     if 'tid' in _result:
         request.session['tid'] = _result['tid']
 
