@@ -6,13 +6,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import CustomUserSerializer
-from django.contrib.auth.hashers import make_password, check_password
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
-    data = request.data
-    serializer = CustomUserSerializer(data=data)
+    serializer = CustomUserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -24,7 +22,7 @@ def login_user(request):
     email = request.data.get('email')
     password = request.data.get('password')
 
-    user = CustomUser.objects.filter(email=email).first()
+    user = CustomUser.objects.filter(email=email, password=password).first()
 
     if user:
         refresh = RefreshToken.for_user(user)
@@ -45,4 +43,3 @@ def login_user(request):
 def logout_user(request):
     # You can add additional logout logic here if needed
     return Response({'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
-
