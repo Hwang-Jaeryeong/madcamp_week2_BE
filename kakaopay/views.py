@@ -27,8 +27,8 @@ def kakaoPayLogic(request):
     if 'tid' in _result:
         request.session['tid'] = _result['tid']
 
-    return redirect(_result['next_redirect_pc_url'])
-
+    if 'next_redirect_pc_url' in _result:
+        return redirect(_result['next_redirect_pc_url'])
 def paySuccess(request):
     _url = 'https://kapi.kakao.com/v1/payment/approve'
     _admin_key = 'e7d2a224f2204042b041e7d646a8e640'
