@@ -7,8 +7,7 @@ from .models import Store, Menu, Price, Star
 def store_list(request):
     stores = Store.objects.all()
     store_dict = {store.name: store.id for store in stores}
-    response_data = {"store_names": store_dict}
-    return JsonResponse(response_data)
+    return JsonResponse(store_dict)
 
 def store_detail(request, store_id, menu_id=None):
     if menu_id is not None:
