@@ -20,8 +20,8 @@ def register_user(request):
 @permission_classes([AllowAny])
 def login_user(request):
     email = request.data.get('email')
-    phone_number = request.data.get('phone_number')
-    user = CustomUser.objects.filter(email=email, phone_number=phone_number).first()
+    password = request.data.get('password')
+    user = CustomUser.objects.filter(email=email, password=password).first()
 
     if user:
         refresh = RefreshToken.for_user(user)
