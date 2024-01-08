@@ -8,6 +8,7 @@
 <body>
     <h2>KakaoPay</h2>
     <form action="/kakaoPayLogic" method="get">
+        {% csrf_token %}
         <div>
             <p>Vitamin Fruit Box Set</p>
             <p>3,000won / 1개</p>
