@@ -49,12 +49,6 @@ class Price(models.Model):
     def __str__(self):
         return f"{self.menu.name} - {self.price}"
 
-class Price(models.Model):
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    price = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.menu.name} - {self.price}"
 
 
 class Star(models.Model):
