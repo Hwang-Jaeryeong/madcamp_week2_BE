@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'store',
     'accounts',
     'cart',
+    'kakaopay',
 ]
 
 SITE_ID = 1
