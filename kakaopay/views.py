@@ -26,12 +26,6 @@ def kakaoPayLogic(request):
     _result = _res.json()
     if 'tid' in _result:
         request.session['tid'] = _result['tid']
-    else:
-    # Handle the case when 'tid' key is not present, possibly by providing a default value or raising an appropriate exception.
-    # For example:
-    # request.session['tid'] = None  # Provide a default value
-    # Or raise an exception:
-    # raise KeyError("'tid' key not found in _result dictionary")
 
     return redirect(_result['next_redirect_pc_url'])
 
