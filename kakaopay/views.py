@@ -33,9 +33,9 @@ def kakaoPayLogic(request):
         'tax_free_amount': '0',
         # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
         # * 등록 : http://IP:8000
-        'approval_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/paySuccess',
-        'fail_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/payFail',
-        'cancel_url':'http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/payCancel'
+        'approval_url':'http://3.34.151.36/paySuccess',
+        'fail_url':'http://3.34.151.36/payFail',
+        'cancel_url':'http://3.34.151.36/payCancel'
     }
     _res = requests.post(_url, data=_data, headers=_headers)
     _result = _res.json()
