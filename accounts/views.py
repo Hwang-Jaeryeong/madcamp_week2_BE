@@ -12,7 +12,6 @@ from django.contrib.auth.hashers import make_password, check_password
 @permission_classes([AllowAny])
 def register_user(request):
     data = request.data
-    data['password'] = make_password(data['password'])  # 비밀번호를 해시화하여 저장
     serializer = CustomUserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
