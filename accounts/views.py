@@ -26,7 +26,7 @@ def login_user(request):
 
     user = CustomUser.objects.filter(email=email).first()
 
-    if user and check_password(password, user.password):
+    if user:
         refresh = RefreshToken.for_user(user)
         data = {
             'access_token': str(refresh.access_token),
