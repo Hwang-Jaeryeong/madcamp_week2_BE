@@ -7,6 +7,5 @@ urlpatterns = [
     path('paySuccess/', views.paySuccess),
     # path('payFail/', views.payFail),
     # path('payCancel/', views.payCancel),
-    # GET | POST - Methods / Params | QueryString
     # path('methodsCheck/<int:id>', views.methodsCheck),
 ]
