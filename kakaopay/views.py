@@ -1,6 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import requests
+import json
+from django.template import loader
+
+def index(request):
+    _context = {'check':False}
+    if request.session.get('access_token'):
+        _context['check'] = True
+    return render(request, 'index.html', _context)
+
 
 def kakaoPay(request):
     return render(request, 'kakaopay.html')
@@ -56,3 +65,26 @@ def paySuccess(request):
     else:
         return render(request, 'paySuccess.html')
         print(_result)
+
+
+def payFail(request):
+    return render(request, 'payFail.html')
+
+
+def payCancel(request):
+    return render(request, 'payCancel.html')
+
+
+def methodsCheck(request, id):
+    if (request.method == 'GET'):
+        print(f"GET QS : {request.GET.get('data', '')}")
+        print(f"GET Dynamic Path : {id}")
+
+    # PostMan으로 Localhost 테스트를 위해 CSRF 해제
+    # project/settings.py 파일에서
+    # MIDDLEWARE -> 'django.middleware.csrf.CsrfViewMiddleware' 주석 처리
+    elif (request.method == 'POST'):
+        print(f"POST QS : {request.GET.get('data', '')}")
+        print(f"POST Dynamic Path : {id}")
+        return HttpResponse("POST Request.", content_type="text/plain")
+    return render(request, 'methodGet.html')
