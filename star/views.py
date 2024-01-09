@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-from rest_framework.utils import json
+from django.contrib.auth import get_user_model  # 추가
 
 from .models import Store, Star
 
@@ -29,7 +29,10 @@ def post_star(request):
         return JsonResponse({'error': 'Invalid rating value. Must be an integer.'}, status=400)
 
     store, created = Store.objects.get_or_create(name=store_name)
-    user = request.user
+
+    # Get the actual user model
+    User = get_user_model()
+    user = request.user if request.user.is_authenticated else None
 
     Star.objects.create(store=store, user=user, rating=rating)
 
