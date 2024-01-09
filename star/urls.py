@@ -1,8 +1,9 @@
 # star/urls.py
+
 from django.urls import path
-from .views import get_store_average_rating, add_store_rating
+from .views import post_star, get_average_rating
 
 urlpatterns = [
-    path('average_rating/', get_store_average_rating, name='get_store_average_rating'),
-    path('add_rating/', add_store_rating, name='add_store_rating'),
+    path('star/', post_star, name='post_star'),
+    path('average_rating/', get_average_rating, name='get_average_rating'),
 ]

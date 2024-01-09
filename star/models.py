@@ -1,9 +1,12 @@
 # star/models.py
+from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
 
-class StoreRating(models.Model):
-    store_name = models.CharField(max_length=255)
+class Store(models.Model):
+    name = models.CharField(max_length=255)
+
+class Star(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.store_name}: {self.rating}점"
