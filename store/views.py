@@ -1,6 +1,7 @@
 # store/views.py
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from .models import Store, Menu, Price, Star
 
@@ -113,3 +114,37 @@ def get_average_rating(request, store_id):
         average_rating = 0
 
     return JsonResponse({'average_rating': average_rating})
+
+
+
+@csrf_exempt
+def add_store_menu(request):
+    if request.method == 'POST':
+        # 프론트엔드에서 전송한 데이터 받기
+        store_name = request.POST.get('store_name')
+        menu_name = request.POST.get('menu_name')
+        quantity = request.POST.get('quantity')
+        detail_name1 = request.POST.get('detail_name1')
+        detail_name2 = request.POST.get('detail_name2')
+        detail_name3 = request.POST.get('detail_name3')
+        price = request.POST.get('price')
+
+        # 가게 정보 저장
+        store = Store.objects.create(name=store_name, latitude=0, longitude=0)
+
+        # 메뉴 정보 저장
+        menu = Menu.objects.create(
+            name=menu_name,
+            remaining_quantity=quantity,
+            detail_name1=detail_name1,
+            detail_name2=detail_name2,
+            detail_name3=detail_name3,
+            store=store
+        )
+
+        # 가격 정보 저장
+        price = Price.objects.create(price=price, menu=menu)
+
+        return render(request, 'store/add_store_menu.html', {'message': 'Store, Menu, and Price added successfully'})
+
+    return render(request, 'store/add_store_menu.html')
