@@ -22,23 +22,14 @@ def view_cart(request):
     # Calculate total_price
     total_price = sum(int(item['price']) for item in serializer.data)
 
-    # Add store_name to each cart item
-    for item in serializer.data:
-        item['store_name'] = item['product']['store_name']
-
-    # Add total_price and store_name to the response
+    # Add total_price to the response
     response_data = {
-        'cart_items': [
-            {
-                **item,
-                'store_name': item['product']['store_name']
-            }
-            for item in serializer.data
-        ],
+        'cart_items': serializer.data,
         'total_price': total_price
     }
 
     return Response(response_data)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
@@ -50,9 +41,6 @@ def add_to_cart(request):
     serializer = CartItemSerializer(cart_item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
 def remove_from_cart(request, cart_item_order):
     cart_items = CartItem.objects.filter(user=request.user)
 
