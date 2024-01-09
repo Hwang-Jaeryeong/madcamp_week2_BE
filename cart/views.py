@@ -1,4 +1,4 @@
-# cart/views.py
+# views.py
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import CartItem
 from .serializers import CartItemSerializer
+from store.views import store_list
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -14,14 +16,14 @@ def view_cart(request):
     cart_items = CartItem.objects.filter(user=user)
 
     if not cart_items:
-        return Response({'detail': '장바구니가 비어 있습니다.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Your shopping cart is empty.'}, status=status.HTTP_200_OK)
 
     serializer = CartItemSerializer(cart_items, many=True)
 
-    # 총 가격 계산
+    # Calculate total_price
     total_price = sum(int(item['price']) for item in serializer.data)
 
-    # 응답에 총 가격 추가
+    # Add total_price to the response
     response_data = {
         'cart_items': serializer.data,
         'total_price': total_price
@@ -35,9 +37,8 @@ def add_to_cart(request):
     user = request.user
     product_name = request.data.get('product_name')
     price = request.data.get('price')
-    store_name = request.data.get('store_name', "알 수 없는 가게")
 
-    cart_item = CartItem.objects.create(user=user, product_name=product_name, price=price, store_name=store_name)
+    cart_item = CartItem.objects.create(user=user, product_name=product_name, price=price)
     serializer = CartItemSerializer(cart_item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -52,7 +53,7 @@ def remove_from_cart(request, cart_item_order):
     try:
         cart_item = sorted_cart_items[cart_item_order - 1]
     except IndexError:
-        raise Http404("장바구니에 항목이 없습니다.")
+        raise Http404("Item not found in the cart")
 
     cart_item.delete()
-    return Response({'detail': '장바구니에서 항목이 제거되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+    return Response({'detail': 'Item removed from the cart'}, status=status.HTTP_204_NO_CONTENT)
