@@ -9,12 +9,20 @@ from .models import Store, Star
 @require_POST
 def post_star(request):
     store_name = request.POST.get('store_name')
-    rating = int(request.POST.get('rating'))
+    rating_str = request.POST.get('rating')
 
-    # 사용자의 access token로 사용자 식별
-    user = request.user
+    # Check if 'rating' parameter is provided
+    if rating_str is None:
+        return JsonResponse({'error': 'Rating parameter is missing.'}, status=400)
+
+    # Check if 'rating' can be converted to int
+    try:
+        rating = int(rating_str)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid rating value. Must be an integer.'}, status=400)
 
     store, created = Store.objects.get_or_create(name=store_name)
+    user = request.user
 
     Star.objects.create(store=store, user=user, rating=rating)
 
