@@ -1,10 +1,11 @@
 # star/views.py
+
 import json
+from urllib.parse import unquote
+
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-from django.contrib.auth import get_user_model  # 추가
-
 from .models import Store, Star
 
 
@@ -28,10 +29,11 @@ def post_star(request):
     except ValueError:
         return JsonResponse({'error': 'Invalid rating value. Must be an integer.'}, status=400)
 
+    store_name = unquote(store_name)  # URL-safe decoding for store_name
+
     store, created = Store.objects.get_or_create(name=store_name)
 
     # Get the actual user model
-    User = get_user_model()
     user = request.user if request.user.is_authenticated else None
 
     Star.objects.create(store=store, user=user, rating=rating)
@@ -40,15 +42,21 @@ def post_star(request):
 
 
 def get_average_rating(request):
-    store_name = request.POST.get('store_name')
+    try:
+        # Try to parse the request body as JSON
+        data = json.loads(request.body)
+        store_name = data.get('store_name')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format.'}, status=400)
+
     store = get_object_or_404(Store, name=store_name)
 
     ratings = Star.objects.filter(store=store).values_list('rating', flat=True)
 
     if ratings:
         average_rating = sum(ratings) / len(ratings)
-        return JsonResponse({'average_rating': average_rating})
+        return JsonResponse({'store_name': store_name, 'average_rating': average_rating})
     else:
-        return JsonResponse({'message': 'No ratings available for this store.'})
+        return JsonResponse({'store_name': store_name, 'message': 'No ratings available for this store.'})
 
 
