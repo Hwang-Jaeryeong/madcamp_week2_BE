@@ -21,15 +21,15 @@ def kakaoPayLogic(request):
     _url = f'https://kapi.kakao.com/v1/payment/ready'
     _headers = {
         'Authorization': f'KakaoAK {_admin_key}',
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     }
     _data = {
         'cid': 'TC0ONETIME',
-        'partner_order_id': 'partner_order_id',
-        'partner_user_id': 'partner_user_id',
-        'item_name': '초코파이',
+        'partner_order_id': '1001',
+        'partner_user_id': 'jryeong67',
+        'item_name': '비타민 과일 박스 세트',
         'quantity': '1',
-        'total_amount': '2200',
-        'vat_amount': '200',
+        'total_amount': '3000',
         'tax_free_amount': '0',
         # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
         # * 등록 : http://IP:8000
