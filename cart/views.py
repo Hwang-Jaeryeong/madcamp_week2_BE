@@ -1,4 +1,5 @@
 # views.py
+from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -40,12 +41,19 @@ def add_to_cart(request):
     serializer = CartItemSerializer(cart_item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def remove_from_cart(request, cart_item_id):
-    cart_item = CartItem.objects.filter(id=cart_item_id, user=request.user).first()
-    if cart_item:
-        cart_item.delete()
-        return Response({'detail': 'Item removed from the cart'}, status=status.HTTP_204_NO_CONTENT)
-    else:
-        return Response({'detail': 'Item not found in the cart'}, status=status.HTTP_404_NOT_FOUND)
+def remove_from_cart(request, cart_item_order):
+    cart_items = CartItem.objects.filter(user=request.user)
+
+    # 순서로 정렬된 카트 아이템을 가져옵니다.
+    sorted_cart_items = sorted(cart_items, key=lambda x: x.id)
+
+    try:
+        cart_item = sorted_cart_items[cart_item_order - 1]
+    except IndexError:
+        raise Http404("Item not found in the cart")
+
+    cart_item.delete()
+    return Response({'detail': 'Item removed from the cart'}, status=status.HTTP_204_NO_CONTENT)
