@@ -1,8 +1,10 @@
 # star/views.py
-
+import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from rest_framework.utils import json
+
 from .models import Store, Star
 
 
