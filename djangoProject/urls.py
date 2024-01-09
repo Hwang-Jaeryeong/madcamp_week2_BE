@@ -10,4 +10,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('cart/', include('cart.urls')),
     path('', include('kakaopay.urls')),
+    path('star/', include(('star.urls'))),
 ]

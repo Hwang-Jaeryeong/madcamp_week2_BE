@@ -57,9 +57,3 @@ class Price(models.Model):
     @property
     def store_id(self):
         return self.menu.store.id
-
-
-
-class Star(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    rating = models.IntegerField()

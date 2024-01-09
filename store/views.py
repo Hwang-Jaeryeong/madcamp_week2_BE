@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
-from .models import Store, Menu, Price, Star
+from .models import Store, Menu, Price
 from django.shortcuts import render
 
 def store_list(request):
@@ -58,7 +58,7 @@ def store_detail(request, store_id, menu_id=None):
 
     if menu_id is not None:
         menu = get_object_or_404(Menu, store_id=store_id, id=menu_id)
-        response_data = menu.as_dict(include_menu_id=True)  # 수정된 부분
+        response_data = menu.as_dict(include_menu_id=True)
     else:
         menus = Menu.objects.filter(store_id=store_id)
         store_name = store.name
@@ -67,7 +67,7 @@ def store_detail(request, store_id, menu_id=None):
 
         menu_list = [
             {
-                "menu_id": menu.id,  # 수정된 부분
+                "menu_id": menu.id,
                 "name": menu.name,
                 "remaining_quantity": menu.remaining_quantity,
                 "details": {
@@ -93,28 +93,7 @@ def store_detail(request, store_id, menu_id=None):
 
 
 
-@require_POST
-def rate_store(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    rating = int(request.POST.get('rating', 0))
 
-    if 1 <= rating <= 5:
-        Star.objects.create(store=store, rating=rating)
-
-    return JsonResponse({'message': 'Rating submitted successfully'})
-
-
-@require_GET
-def get_average_rating(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    ratings = Star.objects.filter(store=store).values_list('rating', flat=True)
-
-    if ratings:
-        average_rating = sum(ratings) / len(ratings)
-    else:
-        average_rating = 0
-
-    return JsonResponse({'average_rating': average_rating})
 
 
 

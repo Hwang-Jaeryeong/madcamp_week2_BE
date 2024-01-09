@@ -1,3 +1,5 @@
+# kakaopay/views.py
+
 from django.shortcuts import render, redirect
 import requests
 import json
@@ -45,7 +47,7 @@ def kakaoPayLogic(request):
 
 def paySuccess(request):
     _url = 'https://kapi.kakao.com/v1/payment/approve'
-    _admin_key = 'e7d2a224f2204042b041e7d646a8e640'  # 입력필요
+    _admin_key = 'e7d2a224f2204042b041e7d646a8e640'
     _headers = {
         'Authorization': f'KakaoAK {_admin_key}'
     }
@@ -61,14 +63,8 @@ def paySuccess(request):
     if _result.get('msg'):
         return redirect('/payFail')
     else:
-        # * 사용하는 프레임워크별 코드를 수정하여 배포하는 방법도 있지만
-        #   Req Header를 통해 분기하는 것을 추천
-        # - Django 등 적용 시
         print(_result)
         return render(request, 'paySuccess.html')
-
-        # - React 적용 시
-        # return redirect('http://localhost:3000')
 
 def payFail(request):
     return render(request, 'payFail.html')
