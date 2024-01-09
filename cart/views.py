@@ -56,3 +56,33 @@ def remove_from_cart(request, cart_item_order):
 
     cart_item.delete()
     return Response({'detail': '장바구니에서 항목이 제거되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def order(request):
+    # 사용자의 access token로 사용자 식별
+    user = request.user
+
+    # 프론트엔드에서 전송한 데이터 받기
+    product_name = request.data.get('product_name')
+    store_name = request.data.get('store_name')
+    price = request.data.get('price')
+
+    # 주문 정보 저장
+    Order.objects.create(user=user, product_name=product_name, store_name=store_name, price=price)
+
+    return Response({'message': 'Order placed successfully'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_order_history(request):
+    # 사용자의 access token로 사용자 식별
+    user = request.user
+
+    # 해당 사용자의 주문 내역 조회
+    orders = Order.objects.filter(user=user)
+
+    # 주문 내역을 직렬화하여 응답
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
