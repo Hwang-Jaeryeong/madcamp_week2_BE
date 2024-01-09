@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from .models import Store, Menu, Price, Star
+from django.shortcuts import render
 
 def store_list(request):
     stores = Store.objects.all()
