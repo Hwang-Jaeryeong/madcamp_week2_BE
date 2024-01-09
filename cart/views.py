@@ -41,6 +41,8 @@ def add_to_cart(request):
     serializer = CartItemSerializer(cart_item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def remove_from_cart(request, cart_item_order):
     cart_items = CartItem.objects.filter(user=request.user)
 
