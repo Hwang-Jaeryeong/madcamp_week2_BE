@@ -17,5 +17,5 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username}의 주문 - {self.product_name}"
+        return f"주문 - {self.product_name}"
 
