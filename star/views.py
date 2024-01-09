@@ -8,12 +8,17 @@ from .models import Store, Star
 
 @require_POST
 def post_star(request):
-    store_name = request.POST.get('store_name')
-    rating_str = request.POST.get('rating')
+    try:
+        # Try to parse the request body as JSON
+        data = json.loads(request.body)
+        store_name = data.get('store_name')
+        rating_str = data.get('rating')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format.'}, status=400)
 
-    # Check if 'rating' parameter is provided
-    if rating_str is None:
-        return JsonResponse({'error': 'Rating parameter is missing.'}, status=400)
+    # Check if 'store_name' and 'rating' parameters are provided
+    if store_name is None or rating_str is None:
+        return JsonResponse({'error': 'Both store_name and rating parameters are required.'}, status=400)
 
     # Check if 'rating' can be converted to int
     try:
