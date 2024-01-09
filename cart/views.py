@@ -20,18 +20,6 @@ def view_cart(request):
 
     serializer = CartItemSerializer(cart_items, many=True)
 
-    # Get store names and IDs
-    store_dict = store_list(request)
-
-    # Create a dictionary with store IDs as keys and store names as values
-    store_name_dict = {str(store_id): store_name for store_name, store_id in store_dict.items()}
-
-    # Iterate through cart items and add store names
-    for item in serializer.data:
-        store_id = item.get('store_id')  # Assuming you have a 'store_id' field in CartItem
-        store_name = store_name_dict.get(str(store_id), 'Unknown Store')
-        item['store_name'] = store_name
-
     # Calculate total_price
     total_price = sum(int(item['price']) for item in serializer.data)
 
