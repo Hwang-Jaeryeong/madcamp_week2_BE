@@ -37,9 +37,8 @@ def add_to_cart(request):
     user = request.user
     product_name = request.data.get('product_name')
     price = request.data.get('price')
-    store_name = request.data.get('store_name')
 
-    cart_item = CartItem.objects.create(user=user, product_name=product_name, price=price, store_name=store_name)
+    cart_item = CartItem.objects.create(user=user, product_name=product_name, price=price)
     serializer = CartItemSerializer(cart_item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
