@@ -12,7 +12,7 @@ from .serializers import CartItemSerializer
 @permission_classes([IsAuthenticated])
 def view_cart(request):
     user = request.user
-    cart_items = CartItem.objects.filter(user=user).select_related('store')  # select_related 추가
+    cart_items = CartItem.objects.filter(user=user)
 
     if not cart_items:
         return Response({'detail': 'Your shopping cart is empty.'}, status=status.HTTP_200_OK)
