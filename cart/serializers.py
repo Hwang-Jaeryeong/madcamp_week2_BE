@@ -5,4 +5,4 @@ from .models import CartItem
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['id', 'product_name', 'price']
+        fields = ['id', 'product_name', 'price', 'store_name']
