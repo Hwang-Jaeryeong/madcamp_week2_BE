@@ -1,7 +1,7 @@
 # Breakfirst
 - Frondend : Android Studio, Kotlin
 - 프론트 관련 정보는 [여기](https://github.com/JunseoPark123/madcamp_week2_FE)에서 확인해주세요!
-- Backend : Django, Python
+- Backend : Django, Python, MySQL, AWS
 
 ## 앱 소개
 Breakfirst는 자취생들의 아침을 책임져주는 플랫폼입니다.
