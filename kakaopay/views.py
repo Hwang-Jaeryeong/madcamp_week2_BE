@@ -29,9 +29,9 @@ def kakaoPayLogic(request):
         'cid': 'TC0ONETIME',
         'partner_order_id': '1001',
         'partner_user_id': 'jryeong67',
-        'item_name': '비타민 과일 박스 세트',
-        'quantity': '1',
-        'total_amount': '3000',
+        'item_name': '비타민 과일 박스 세트 외 2건',
+        'quantity': '3',
+        'total_amount': '10300',
         'tax_free_amount': '0',
         # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
         # * 등록 : http://IP:8000
